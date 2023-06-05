@@ -2,7 +2,7 @@
 
 Going forward, Apple TV support for React Native will be maintained here and in the corresponding `react-native-tvos` NPM package, and not in the [core repo](https://github.com/facebook/react-native/).  This is a full fork of the main repository, with only the changes needed to support Apple TV.
 
-Releases of `react-native-tvos` will be based on a public release of `react-native`; e.g. the 0.69.5-0 release of this package will be derived from the 0.69.5 release of `react-native`. All releases of this repo will follow the 0.xx.x-y format, where x digits are from a specific RN core release, and y represents the additional versioning from this repo.
+Releases of `react-native-tvos` will be based on a public release of `react-native`; e.g. the 0.71.8-0 release of this package will be derived from the 0.71.8 release of `react-native`. All releases of this repo will follow the 0.xx.x-y format, where x digits are from a specific RN core release, and y represents the additional versioning from this repo.
 
 Releases will be published on npmjs.org and you may find the latest release version here: https://www.npmjs.com/package/react-native-tvos?activeTab=versions or use the tag `@latest`
 
@@ -25,35 +25,28 @@ export RCT_NEW_ARCH_ENABLED=1
 ```
 Notes:
 
-- _Apple TV_: `pod install` will pick up the additional pods needed for the new architecture.
-- _Android TV_: Enabling the new architecture will cause your app to be built from React Native sources, including C++ sources, so you will need the NDK and the build will take much longer.
-- _Third party libraries_: As of this moment, third party libraries have not all enabled support for the new architecture.
-- _Bugs_: There are some issues with interactions between Apple TV parallax properties implementation and the new renderer. TabBarIOS has not been reimplemented in the new architecture so it will show up as an "unimplemented component".
+- _Apple TV_: `pod install` will pick up the additional pods needed for the new architecture. There are some issues with interactions between Apple TV parallax properties implementation and the new renderer. TabBarIOS has not been reimplemented in the new architecture so it will show up as an "unimplemented component".
+- _Android TV_: As in the core repo, Android builds use prebuilt artifacts published in Maven Central.
 
 ### Typescript
 
-Due to the nature of the typing resolution, the current solution to include types is to:
-
-- install `@types/react-native` as a dev dependency
-- put `import 'react-native/tvos-types.d'` in any of your `.ts` files (root suggested)
-
-See the "Build Changes" section below for how to start a new project that will automatically use Typescript.
+Typescript types for TV-specific components and APIs have been added to `types/public`.
 
 ## General support for Apple TV
 
-TV devices support has been implemented with the intention of making existing React Native applications "just work" on Apple TV, with few or no changes needed in the JavaScript code for the applications.
+TV device support has been implemented with the intention of making existing React Native applications "just work" on Apple TV, with few or no changes needed in the JavaScript code for the applications.
 
 The RNTester app supports Apple TV.  In this repo, `RNTester/Podfile` and `RNTester/RNTesterPods.xcodeproj` have been modified to work for tvOS.  Run `pod install`, then open `RNTesterPods.xcworkspace` and build.
 
 ## Pitfall
 
-Make sure you do not globally install `react-native` or `react-native-tvos`. You should only install `react-native-cli` to use the commands below. If you have done this the wrong way, you may get error messages like:
+Make sure you do not globally install `react-native` or `react-native-tvos`. You should only install `@react-native-community/cli` to use the commands below. If you have done this the wrong way, you may get error messages like:
 
 ```
 ld: library not found for -lPods-TestApp-tvOS
 ```
 
-You should also install `yarn` globally, as it should be used instead of npm for working in React Native projects.
+You should also install `yarn` globally, as it should be used instead of `npm` for working in React Native projects.
 
 ## Build changes
 
@@ -61,11 +54,11 @@ You should also install `yarn` globally, as it should be used instead of npm for
 
 - _react-native init_: Creating a new project that uses this package is done using the react-native CLI.  New projects created this way will automatically have properly configured Apple TV targets created in their XCode projects.
 
-To use this NPM package in a new project, you can reference it as in the following example using the older `react-native-cli` package:
+To use this NPM package in a new project, you can reference it as in the following example using the React Native CLI:
 
 ```sh
 # Make sure you have the CLI installed globally (this only needs to be done once on your system)
-npm install -g react-native-cli
+npm install -g @react-native-community/cli
 # Init an app called 'TestApp', note that you must not be in a node module (directory with node_modules sub-directory) for this to work
 react-native init TestApp --version=react-native@npm:react-native-tvos@latest
 # Now start the app in the tvOS Simulator - this will only work on a macOS machine
